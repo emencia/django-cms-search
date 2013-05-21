@@ -48,7 +48,7 @@ def _get_index_base():
 rf = RequestFactory()
 
 
-def page_index_factory(language_code):
+def page_index_factory(language_code, index_class_name):
     _PageIndex = None
 
     def prepare(self, obj):
@@ -94,7 +94,7 @@ def page_index_factory(language_code):
             result_qs |= qs
         return result_qs
 
-    _PageIndex = type(language_code.upper() + 'PageIndex', (_get_index_base(),), {
+    _PageIndex = type(index_class_name, (_get_index_base(),), {
         '_language': language_code,
         'language': indexes.CharField(),
 
@@ -113,9 +113,11 @@ def page_index_factory(language_code):
 
 
 for language_code, language_name in settings.LANGUAGES:
+    index_class_name = language_name.title() + 'PageIndex'
+    index_class = page_index_factory(language_code, index_class_name)
+
     proxy_model = getattr(proxy_models, proxy_models.proxy_name(language_code))
-    index = page_index_factory(language_code)
     if proxy_model:
-        site.register(proxy_model, index)
+        site.register(proxy_model, index_class)
     else:
         print "no page proxy model found for language %s" % language_code
