@@ -48,7 +48,7 @@ def _get_index_base():
 rf = RequestFactory()
 
 
-def page_index_factory(language_code, index_class_name):
+def page_index_factory(language_code, index_class_name, model_class):
     _PageIndex = None
 
     def prepare(self, obj):
@@ -81,6 +81,9 @@ def page_index_factory(language_code, index_class_name):
             if get_language() != current_languge:
                 activate(current_languge)
 
+    def get_model(self):
+        return model_class
+
     def index_queryset(self, *args, **kwargs):
         # get the correct language and exclude pages that have a redirect
         base_qs = super(_PageIndex, self).index_queryset(*args, **kwargs)
@@ -106,6 +109,7 @@ def page_index_factory(language_code, index_class_name):
         'site_id': indexes.IntegerField(stored=True, indexed=True, model_attr='site_id'),
 
         'prepare': prepare,
+        'get_model': get_model,
         'index_queryset': index_queryset,
     })
 
@@ -114,9 +118,9 @@ def page_index_factory(language_code, index_class_name):
 
 for language_code, language_name in settings.LANGUAGES:
     index_class_name = language_name.title() + 'PageIndex'
-    index_class = page_index_factory(language_code, index_class_name)
-
     proxy_model = getattr(proxy_models, proxy_models.proxy_name(language_code))
+    index_class = page_index_factory(language_code, index_class_name, proxy_model)
+
     if proxy_model:
         site.register(proxy_model, index_class)
     else:
