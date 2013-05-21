@@ -127,4 +127,4 @@ for language_code, language_name in settings.LANGUAGES:
     if proxy_model:
         site.register(proxy_model, index_class)
     else:
-        print "no page proxy model found for language %s" % language_code
+        print "No page proxy model found for language %s" % language_code
