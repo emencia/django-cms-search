@@ -130,3 +130,7 @@ for language_code, language_name in settings.LANGUAGES:
         globals()[index_class_name] = index_class
     else:
         print "No page proxy model found for language %s" % language_code
+
+# Erase reference to index class so haystack doesn't complain about duplicate
+# index classes
+index_class = None
