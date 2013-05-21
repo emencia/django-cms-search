@@ -100,7 +100,7 @@ def page_index_factory(language_code, index_class_name, model_class):
             result_qs |= qs
         return result_qs
 
-    _PageIndex = type(index_class_name, (_get_index_base(),), {
+    _PageIndex = type(index_class_name, (_get_index_base(), indexes.Indexable), {
         '_language': language_code,
         'language': indexes.CharField(),
 
