@@ -1,8 +1,8 @@
 import re
 
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from django.contrib.sites.models import Site
+from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Q
 from django.db.models.query import EmptyQuerySet
 from django.template import RequestContext
