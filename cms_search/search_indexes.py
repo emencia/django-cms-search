@@ -15,9 +15,8 @@ try:
 except ImportError:
     from django.utils import importlib  # NOQA
 
-from haystack import indexes, site
-
 from cms.models.pluginmodel import CMSPlugin
+from haystack import indexes
 
 from cms_search import models as proxy_models
 from cms_search import settings as search_settings
@@ -127,7 +126,7 @@ for language_code, language_name in settings.LANGUAGES:
     index_class_name = language_name.title() + 'PageIndex'
     index_class = page_index_factory(language_code, index_class_name)
 
-    if proxy_model:
-        site.register(proxy_model, index_class)
+    if index_class:
+        globals()[index_class_name] = index_class
     else:
         print "No page proxy model found for language %s" % language_code
