@@ -32,8 +32,10 @@ from cms.models.pluginmodel import CMSPlugin
 
 from cms_search import models as proxy_models
 from cms_search import settings as search_settings
+from cms_search.utils import memoize
 
 
+@memoize()
 def _get_index_base():
     index_string = search_settings.INDEX_BASE_CLASS
     module, class_name = index_string.rsplit('.', 1)
