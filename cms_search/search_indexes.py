@@ -123,7 +123,7 @@ def page_index_factory(language_code, index_class_name):
 
 
 for language_code, language_name in settings.LANGUAGES:
-    index_class_name = language_name.title() + 'PageIndex'
+    index_class_name = language_code.upper() + 'PageIndex'
     index_class = page_index_factory(language_code, index_class_name)
 
     if index_class:
