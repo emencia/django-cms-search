@@ -24,7 +24,7 @@ def _strip_tags(value):
 try:
     import importlib
 except ImportError:
-    from django.utils import importlib
+    from django.utils import importlib  # NOQA
 
 from haystack import indexes, site
 
