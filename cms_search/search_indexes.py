@@ -33,6 +33,7 @@ from cms.models.pluginmodel import CMSPlugin
 from cms_search import models as proxy_models
 from cms_search import settings as search_settings
 
+
 def _get_index_base():
     index_string = search_settings.INDEX_BASE_CLASS
     module, class_name = index_string.rsplit('.', 1)
@@ -45,6 +46,7 @@ def _get_index_base():
     return base_class
 
 rf = RequestFactory()
+
 
 def page_index_factory(language_code):
 
