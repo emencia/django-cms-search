@@ -10,17 +10,6 @@ from django.test.client import RequestFactory
 from django.utils.encoding import force_unicode
 from django.utils.translation import get_language, activate
 
-
-def _strip_tags(value):
-    """
-    Returns the given HTML with all tags stripped.
-
-    This is a copy of django.utils.html.strip_tags, except that it adds some
-    whitespace in between replaced tags to make sure words are not erroneously
-    concatenated.
-    """
-    return re.sub(r'<[^>]*?>', ' ', force_unicode(value))
-
 try:
     import importlib
 except ImportError:
@@ -35,6 +24,20 @@ from cms_search import settings as search_settings
 from cms_search.utils import memoize
 
 
+rf = RequestFactory()
+
+
+def _strip_tags(value):
+    """
+    Returns the given HTML with all tags stripped.
+
+    This is a copy of django.utils.html.strip_tags, except that it adds some
+    whitespace in between replaced tags to make sure words are not erroneously
+    concatenated.
+    """
+    return re.sub(r'<[^>]*?>', ' ', force_unicode(value))
+
+
 @memoize()
 def _get_index_base():
     index_string = search_settings.INDEX_BASE_CLASS
@@ -46,8 +49,6 @@ def _get_index_base():
     if not issubclass(base_class, indexes.SearchIndex):
         raise ImproperlyConfigured('CMS_SEARCH_INDEX_BASE_CLASS: %s is not a subclass of haystack.indexes.SearchIndex' % search_settings.INDEX_BASE_CLASS)
     return base_class
-
-rf = RequestFactory()
 
 
 def page_index_factory(language_code, index_class_name, model_class):
