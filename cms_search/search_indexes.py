@@ -51,8 +51,12 @@ def _get_index_base():
     return base_class
 
 
-def page_index_factory(language_code, index_class_name, model_class):
+def page_index_factory(language_code, index_class_name):
+    model_class = getattr(proxy_models, proxy_models.proxy_name(language_code))
     _PageIndex = None
+
+    if not model_class:
+        return _PageIndex
 
     def prepare(self, obj):
         current_languge = get_language()
@@ -121,8 +125,7 @@ def page_index_factory(language_code, index_class_name, model_class):
 
 for language_code, language_name in settings.LANGUAGES:
     index_class_name = language_name.title() + 'PageIndex'
-    proxy_model = getattr(proxy_models, proxy_models.proxy_name(language_code))
-    index_class = page_index_factory(language_code, index_class_name, proxy_model)
+    index_class = page_index_factory(language_code, index_class_name)
 
     if proxy_model:
         site.register(proxy_model, index_class)
